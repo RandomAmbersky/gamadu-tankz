@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libs/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="tankz/libs/natives-win32"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/phys2d-060408.jar" sourcepath="libs/src060408.zip"/>
+	<classpathentry kind="lib" path="libs/slick.jar" sourcepath="libs/slick-src.zip"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/artemis"/>
+	<classpathentry kind="lib" path="libs/kryonet/kryo-1.02.jar"/>
+	<classpathentry kind="lib" path="libs/kryonet/kryonet-1.02.jar"/>
+	<classpathentry kind="lib" path="libs/kryonet/asm-3.2.jar"/>
+	<classpathentry kind="lib" path="libs/kryonet/minlog-1.2.jar"/>
+	<classpathentry kind="lib" path="libs/kryonet/reflectasm-1.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
