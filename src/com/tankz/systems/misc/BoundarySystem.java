@@ -1,10 +1,9 @@
 package com.tankz.systems.misc;
 
-import com.artemis.Component;
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.artemis.EntityProcessingSystem;
-import com.artemis.utils.ImmutableBag;
+import com.artemis.systems.EntityProcessingSystem;
 import com.tankz.components.Physics;
 
 public class BoundarySystem extends EntityProcessingSystem {
@@ -16,7 +15,7 @@ public class BoundarySystem extends EntityProcessingSystem {
 	private int boundsEndY;
 
 	public BoundarySystem(int boundsStartX, int boundsStartY, int boundsEndX, int boundsEndY) {
-		super(Physics.class);
+		super(Aspect.getAspectFor(Physics.class));
 
 		this.boundsStartX = boundsStartX;
 		this.boundsStartY = boundsStartY;
@@ -26,7 +25,7 @@ public class BoundarySystem extends EntityProcessingSystem {
 
 	@Override
 	public void initialize() {
-		physicsMapper = new ComponentMapper<Physics>(Physics.class, world);
+		physicsMapper = world.getMapper(Physics.class);
 	}
 
 	@Override

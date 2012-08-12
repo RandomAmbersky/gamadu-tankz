@@ -6,6 +6,7 @@ import net.phys2d.raw.shapes.Box;
 
 import com.artemis.Entity;
 import com.artemis.World;
+import com.artemis.managers.GroupManager;
 import com.artemis.utils.TrigLUT;
 import com.tankz.components.Ammo;
 import com.tankz.components.Expiration;
@@ -24,13 +25,13 @@ public class EntityFactory {
 		e.addComponent(new Transform(x, y));
 		e.addComponent(new SpatialForm("explosion"));
 		e.addComponent(new Expiration(200));
-		e.refresh();
+		e.addToWorld();
 		return e;
 	}
 
 	public static Entity createBullet(World world, float x, float y, float angle, Entity shooter) {
 		Entity e = world.createEntity();
-		e.setGroup("bullets");
+		world.getManager(GroupManager.class).add(e, "bullets");
 		Transform transform = new Transform(x, y, angle);
 		e.addComponent(transform);
 		e.addComponent(new SpatialForm("bullet"));
@@ -56,14 +57,14 @@ public class EntityFactory {
 
 		e.addComponent(new Physics(b));
 
-		e.refresh();
+		e.addToWorld();
 
 		return e;
 	}
 
 	public static Entity createWall(World world, float x, float y) {
 		Entity e = world.createEntity();
-		e.setGroup("walls");
+		world.getManager(GroupManager.class).add(e, "walls");
 
 		SpatialForm form = new SpatialForm("wall");
 		e.addComponent(form);
@@ -79,14 +80,14 @@ public class EntityFactory {
 		b.setFriction(100);
 		e.addComponent(new Physics(b));
 
-		e.refresh();
+		e.addToWorld();
 
 		return e;
 	}
 
 	public static Entity createCrate(World world, float x, float y, float angleDeg) {
 		Entity e = world.createEntity();
-		e.setGroup("crates");
+		world.getManager(GroupManager.class).add(e, "crates");
 		e.addComponent(new Health(100, 160));
 
 		SpatialForm form = new SpatialForm("crate");
@@ -102,14 +103,14 @@ public class EntityFactory {
 		b.setRotation(angleDeg);
 		e.addComponent(new Physics(b));
 
-		e.refresh();
+		e.addToWorld();
 
 		return e;
 	}
 
 	public static Entity createMammothTank(World world, float x, float y) {
 		Entity e = world.createEntity();
-		e.setGroup("tanks");
+		world.getManager(GroupManager.class).add(e, "tanks");
 
 		e.addComponent(new SpatialForm("mammothTank"));
 		e.addComponent(new Velocity());
@@ -133,7 +134,7 @@ public class EntityFactory {
 	public static Entity createSound(World world, String soundFileName) {
 		Entity sound = world.createEntity();
 		sound.addComponent(new SoundFile(soundFileName));
-		sound.refresh();
+		sound.addToWorld();
 		return sound;
 	}
 }

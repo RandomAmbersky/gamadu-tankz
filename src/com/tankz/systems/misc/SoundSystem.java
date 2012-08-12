@@ -3,21 +3,22 @@ package com.tankz.systems.misc;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.artemis.EntityProcessingSystem;
+import com.artemis.systems.EntityProcessingSystem;
 import com.tankz.components.SoundFile;
 
 public class SoundSystem extends EntityProcessingSystem {
 	private ComponentMapper<SoundFile> soundMapper;
 
 	public SoundSystem() {
-		super(SoundFile.class);
+		super(Aspect.getAspectFor(SoundFile.class));
 	}
 
 	@Override
 	public void initialize() {
-		soundMapper = new ComponentMapper<SoundFile>(SoundFile.class, world);
+		soundMapper = world.getMapper(SoundFile.class);
 	}
 
 	@Override

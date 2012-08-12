@@ -2,8 +2,9 @@ package com.tankz.systems.network;
 
 import java.io.IOException;
 
+import com.artemis.Aspect;
 import com.artemis.Entity;
-import com.artemis.IntervalEntitySystem;
+import com.artemis.systems.IntervalEntitySystem;
 import com.artemis.utils.ImmutableBag;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -15,7 +16,7 @@ public class ClientNetworkSystem extends IntervalEntitySystem {
 	private String serverIp;
 
 	public ClientNetworkSystem(int interval, String serverIp) {
-		super(interval);
+		super(Aspect.getAspectFor(), interval);
 		this.serverIp = serverIp;
 	}
 	

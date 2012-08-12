@@ -4,9 +4,11 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
+import com.artemis.managers.TagManager;
 import com.artemis.utils.ImmutableBag;
 import com.tankz.components.Physics;
 import com.tankz.systems.misc.BoundarySystem;
@@ -32,17 +34,17 @@ public class CameraSystem extends EntitySystem implements MouseListener {
 	private Input input;
 
 	public CameraSystem(GameContainer container) {
-		super();
+		super(Aspect.getAspectFor());
 		this.container = container;
 	}
 
 	@Override
 	public void initialize() {
-		physicsMapper = new ComponentMapper<Physics>(Physics.class, world);
+		physicsMapper = world.getMapper(Physics.class);
 
 		ensurePlayerEntity();
 		
-		boundarySystem = world.getSystemManager().getSystem(BoundarySystem.class);
+		boundarySystem = world.getSystem(BoundarySystem.class);
 		
 		input = container.getInput();
 		input.addMouseListener(this);
@@ -147,7 +149,7 @@ public class CameraSystem extends EntitySystem implements MouseListener {
 
 	private void ensurePlayerEntity() {
 		if (player == null || !player.isActive())
-			player = world.getTagManager().getEntity("PLAYER");
+			player = world.getManager(TagManager.class).getEntity("PLAYER");
 	}
 
 	@Override

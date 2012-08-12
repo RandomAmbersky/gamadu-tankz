@@ -5,6 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import com.artemis.Aspect;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
 import com.artemis.utils.ImmutableBag;
@@ -17,7 +18,7 @@ public class TerrainRenderSystem extends EntitySystem {
 	private CameraSystem cs;
 
 	public TerrainRenderSystem(GameContainer container) {
-		super();
+		super(Aspect.getAspectFor());
 
 		this.container = container;
 		this.g = container.getGraphics();
@@ -31,7 +32,7 @@ public class TerrainRenderSystem extends EntitySystem {
 			e.printStackTrace();
 		}
 
-		cs = world.getSystemManager().getSystem(CameraSystem.class);
+		cs = world.getSystem(CameraSystem.class);
 	}
 
 	@Override

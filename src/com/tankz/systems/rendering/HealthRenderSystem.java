@@ -6,9 +6,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.artemis.EntityProcessingSystem;
+import com.artemis.systems.EntityProcessingSystem;
 import com.tankz.components.Health;
 import com.tankz.components.Physics;
 import com.tankz.systems.camera.CameraSystem;
@@ -25,7 +26,7 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 	private CameraSystem cameraSystem;
 
 	public HealthRenderSystem(GameContainer container) {
-		super(Health.class);
+		super(Aspect.getAspectFor(Health.class));
 
 		this.container = container;
 		this.g = container.getGraphics();
@@ -33,8 +34,8 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 
 	@Override
 	public void initialize() {
-		healthMapper = new ComponentMapper<Health>(Health.class, world);
-		physicsMapper = new ComponentMapper<Physics>(Physics.class, world);
+		healthMapper = world.getMapper(Health.class);
+		physicsMapper = world.getMapper(Physics.class);
 
 		healthColor = new Color(72f / 255f, 1f, 0f, 1f);
 		bgColor = new Color(1f, 1f, 1f, 0.2f);
@@ -45,7 +46,7 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 			e.printStackTrace();
 		}
 		
-		cameraSystem = world.getSystemManager().getSystem(CameraSystem.class);
+		cameraSystem = world.getSystem(CameraSystem.class);
 	}
 	
 	@Override

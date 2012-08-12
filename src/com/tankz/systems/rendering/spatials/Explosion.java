@@ -22,10 +22,10 @@ public class Explosion extends Spatial {
 
 	@Override
 	public void initalize() {
-		ComponentMapper<Expiration> expirationMapper = new ComponentMapper<Expiration>(Expiration.class, world);
+		ComponentMapper<Expiration> expirationMapper = world.getMapper(Expiration.class);
 		expiraton = expirationMapper.get(owner);
 
-		ComponentMapper<Transform> transformMapper = new ComponentMapper<Transform>(Transform.class, world);
+		ComponentMapper<Transform> transformMapper = world.getMapper(Transform.class);
 		transform = transformMapper.get(owner);
 		radius = 5;
 		color = new Color(Color.yellow);

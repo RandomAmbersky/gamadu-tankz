@@ -3,9 +3,10 @@ package com.tankz.systems.rendering;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.artemis.EntityProcessingSystem;
+import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.Bag;
 import com.tankz.components.SpatialForm;
 import com.tankz.systems.camera.CameraSystem;
@@ -24,16 +25,16 @@ public class RenderSystem extends EntityProcessingSystem {
 	private GameContainer container;
 
 	public RenderSystem(GameContainer container) {
-		super(SpatialForm.class);
+		super(Aspect.getAspectFor(SpatialForm.class));
 		this.container = container;
 		this.graphics = container.getGraphics();
 	}
 
 	@Override
 	public void initialize() {
-		spatialFormMapper = new ComponentMapper<SpatialForm>(SpatialForm.class, world);
+		spatialFormMapper = world.getMapper(SpatialForm.class);
 
-		cameraSystem = world.getSystemManager().getSystem(CameraSystem.class);
+		cameraSystem = world.getSystem(CameraSystem.class);
 
 		spatials = new Bag<Spatial>();
 	}

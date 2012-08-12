@@ -6,15 +6,13 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import com.artemis.ComponentType;
-import com.artemis.ComponentTypeManager;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.tankz.components.Physics;
-import com.tankz.components.Transform;
 
 public class Bullet extends Spatial {
 	private static Color color = new Color(51, 204, 69);
-	private static ComponentType type = ComponentTypeManager.getTypeFor(Physics.class);
+	private static ComponentType type = ComponentType.getTypeFor(Physics.class);
 
 	private static Image img = null;
 	static {

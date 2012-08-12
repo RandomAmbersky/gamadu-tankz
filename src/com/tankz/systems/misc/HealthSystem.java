@@ -1,20 +1,21 @@
 package com.tankz.systems.misc;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.artemis.EntityProcessingSystem;
+import com.artemis.systems.EntityProcessingSystem;
 import com.tankz.components.Health;
 
 public class HealthSystem extends EntityProcessingSystem {
 	private ComponentMapper<Health> healthMapper;
 
 	public HealthSystem() {
-		super(Health.class);
+		super(Aspect.getAspectFor(Health.class));
 	}
 
 	@Override
 	public void initialize() {
-		healthMapper = new ComponentMapper<Health>(Health.class, world);
+		healthMapper = world.getMapper(Health.class);
 	}
 
 	@Override

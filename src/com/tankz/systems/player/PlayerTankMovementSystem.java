@@ -7,9 +7,11 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
+import com.artemis.managers.TagManager;
 import com.artemis.utils.ImmutableBag;
 import com.artemis.utils.TrigLUT;
 import com.tankz.components.Physics;
@@ -52,7 +54,7 @@ public class PlayerTankMovementSystem extends EntitySystem implements KeyListene
 	private float velocity;
 
 	public PlayerTankMovementSystem(GameContainer container) {
-		super();
+		super(Aspect.getAspectFor());
 
 		this.container = container;
 		this.input = container.getInput();
@@ -62,11 +64,11 @@ public class PlayerTankMovementSystem extends EntitySystem implements KeyListene
 	
 	@Override
 	public void initialize() {
-		transformMapper = new ComponentMapper<Transform>(Transform.class, world);
-		velocityMapper = new ComponentMapper<Velocity>(Velocity.class, world);
-		turnFactorMapper = new ComponentMapper<TurnFactor>(TurnFactor.class, world);
-		towerMapper = new ComponentMapper<Tower>(Tower.class, world);
-		collidableMapper = new ComponentMapper<Physics>(Physics.class, world);
+		transformMapper = world.getMapper(Transform.class);
+		velocityMapper = world.getMapper(Velocity.class);
+		turnFactorMapper = world.getMapper(TurnFactor.class);
+		towerMapper = world.getMapper(Tower.class);
+		collidableMapper = world.getMapper(Physics.class);
 		
 		ensurePlayerEntity();
 	}
@@ -87,7 +89,7 @@ public class PlayerTankMovementSystem extends EntitySystem implements KeyListene
 	
 	private void ensurePlayerEntity() {
 		if (player == null || !player.isActive())
-			player = world.getTagManager().getEntity("PLAYER");
+			player = world.getManager(TagManager.class).getEntity("PLAYER");
 	}
 
 	protected void updatePlayer(Entity e) {

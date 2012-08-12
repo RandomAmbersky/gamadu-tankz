@@ -7,9 +7,11 @@ import net.phys2d.raw.CollisionListener;
 import net.phys2d.raw.World;
 import net.phys2d.raw.strategies.QuadSpaceStrategy;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.artemis.IntervalEntitySystem;
+import com.artemis.managers.GroupManager;
+import com.artemis.systems.IntervalEntitySystem;
 import com.artemis.utils.ImmutableBag;
 import com.tankz.EntityFactory;
 import com.tankz.components.Health;
@@ -22,13 +24,13 @@ public class PhysicsSystem extends IntervalEntitySystem implements CollisionList
 	private World physicsWorld;
 
 	public PhysicsSystem() {
-		super(20, Physics.class);
+		super(Aspect.getAspectFor(Physics.class), 20);
 	}
 
 	@Override
 	public void initialize() {
-		physicsMapper = new ComponentMapper<Physics>(Physics.class, world);
-		transformMapper = new ComponentMapper<Transform>(Transform.class, world);
+		physicsMapper = world.getMapper(Physics.class);
+		transformMapper = world.getMapper(Transform.class);
 
 		physicsWorld = new World(new Vector2f(0, 0), 10, new QuadSpaceStrategy(8, 6));
 		physicsWorld.enableRestingBodyDetection(1f, 1f, 1f);
@@ -62,20 +64,25 @@ public class PhysicsSystem extends IntervalEntitySystem implements CollisionList
 		Entity entityA = Entity.class.cast(bodyA.getUserData());
 		Entity entityB = Entity.class.cast(bodyB.getUserData());
 
-		String groupA = world.getGroupManager().getGroupOf(entityA);
-		String groupB = world.getGroupManager().getGroupOf(entityB);
+		ImmutableBag<String> groupsA = world.getManager(GroupManager.class).getGroups(entityA);
+		ImmutableBag<String> groupsB = world.getManager(GroupManager.class).getGroups(entityB);
 		
-		if("crates".equalsIgnoreCase(groupA) && "bullets".equalsIgnoreCase(groupB)) {
+		if(groupsA.contains("crates") && groupsB.contains("bullets")) {
 			handleBulletHittingTarget(entityB, entityA);
-		} else if("crates".equalsIgnoreCase(groupB) && "bullets".equalsIgnoreCase(groupA)) {
+		}
+		else if(groupsB.contains("crates") && groupsA.contains("bullets")) {
 			handleBulletHittingTarget(entityA, entityB);
-		} else if("tanks".equalsIgnoreCase(groupB) && "bullets".equalsIgnoreCase(groupA)) {
+		}
+		else if(groupsB.contains("tanks") && groupsA.contains("bullets")) {
 			handleBulletHittingTarget(entityA, entityB);
-		} else if("bullets".equalsIgnoreCase(groupB) && "tanks".equalsIgnoreCase(groupA)) {
+		}
+		else if(groupsB.contains("bullets") && groupsA.contains("tanks")) {
 			handleBulletHittingTarget(entityB, entityA);
-		} else if("bullets".equalsIgnoreCase(groupB) && "walls".equalsIgnoreCase(groupA)) {
+		}
+		else if(groupsB.contains("bullets") && groupsA.contains("walls")) {
 			handleBulletHittingTarget(entityB, entityA);
-		} else if("walls".equalsIgnoreCase(groupB) && "bullets".equalsIgnoreCase(groupA)) {
+		}
+		else if(groupsB.contains("walls") && groupsA.contains("bullets")) {
 			handleBulletHittingTarget(entityA, entityB);
 		}
 	}

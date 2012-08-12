@@ -5,17 +5,14 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.World;
+import com.artemis.managers.PlayerManager;
 import com.artemis.utils.Utils;
 import com.tankz.components.Physics;
 import com.tankz.components.Tower;
-import com.tankz.components.Transform;
 import com.tankz.components.TurnFactor;
 import com.tankz.components.Velocity;
-import com.tankz.managers.Player;
-import com.tankz.managers.PlayerManager;
 
 public class MammothTank extends Spatial {
 	private static Image shadow = null;
@@ -66,8 +63,8 @@ public class MammothTank extends Spatial {
 		velocity = owner.getComponent(Velocity.class);
 		turnFactor = owner.getComponent(TurnFactor.class);
 		tower = owner.getComponent(Tower.class);
-		Player player = world.getManager(PlayerManager.class).getPlayer(owner);
-		color = player.getColor();
+		String player = world.getManager(PlayerManager.class).getPlayer(owner);
+		color = Color.green;//player.getColor();
 
 		trackTileWidth = trackTile.getWidth();
 

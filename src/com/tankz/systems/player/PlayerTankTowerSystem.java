@@ -4,16 +4,17 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
+import com.artemis.managers.TagManager;
 import com.artemis.utils.ImmutableBag;
 import com.artemis.utils.TrigLUT;
 import com.artemis.utils.Utils;
 import com.tankz.EntityFactory;
 import com.tankz.components.Ammo;
 import com.tankz.components.Physics;
-import com.tankz.components.SoundFile;
 import com.tankz.components.Tower;
 import com.tankz.components.Transform;
 import com.tankz.components.TurnFactor;
@@ -52,7 +53,7 @@ public class PlayerTankTowerSystem extends EntitySystem implements MouseListener
 	private Entity player;
 
 	public PlayerTankTowerSystem(GameContainer container) {
-		super();
+		super(Aspect.getAspectFor());
 
 		this.container = container;
 		this.input = container.getInput();
@@ -62,12 +63,12 @@ public class PlayerTankTowerSystem extends EntitySystem implements MouseListener
 
 	@Override
 	public void initialize() {
-		transformMapper = new ComponentMapper<Transform>(Transform.class, world);
-		velocityMapper = new ComponentMapper<Velocity>(Velocity.class, world);
-		turnFactorMapper = new ComponentMapper<TurnFactor>(TurnFactor.class, world);
-		towerMapper = new ComponentMapper<Tower>(Tower.class, world);
-		physicsMapper = new ComponentMapper<Physics>(Physics.class, world);
-		ammoMapper = new ComponentMapper<Ammo>(Ammo.class, world);
+		transformMapper = world.getMapper(Transform.class);
+		velocityMapper = world.getMapper(Velocity.class);
+		turnFactorMapper = world.getMapper(TurnFactor.class);
+		towerMapper = world.getMapper(Tower.class);
+		physicsMapper = world.getMapper(Physics.class);
+		ammoMapper = world.getMapper(Ammo.class);
 
 		ensurePlayerEntity();
 	}
@@ -88,7 +89,7 @@ public class PlayerTankTowerSystem extends EntitySystem implements MouseListener
 
 	private void ensurePlayerEntity() {
 		if (player == null || !player.isActive())
-			player = world.getTagManager().getEntity("PLAYER");
+			player = world.getManager(TagManager.class).getEntity("PLAYER");
 	}
 
 	protected void updatePlayer(Entity e) {

@@ -8,15 +8,17 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
+import com.artemis.managers.GroupManager;
+import com.artemis.managers.PlayerManager;
+import com.artemis.managers.TagManager;
 import com.artemis.utils.ImmutableBag;
 import com.tankz.components.Ammo;
 import com.tankz.components.Health;
 import com.tankz.components.Physics;
-import com.tankz.managers.Player;
-import com.tankz.managers.PlayerManager;
 import com.tankz.systems.camera.CameraSystem;
 import com.tankz.systems.misc.BoundarySystem;
 
@@ -38,7 +40,7 @@ public class HudRenderSystem extends EntitySystem {
 	private ComponentMapper<Physics> physicsMapper;
 
 	public HudRenderSystem(GameContainer container) {
-		super();
+		super(Aspect.getAspectFor());
 
 		this.container = container;
 		this.g = container.getGraphics();
@@ -46,9 +48,9 @@ public class HudRenderSystem extends EntitySystem {
 
 	@Override
 	public void initialize() {
-		physicsMapper = new ComponentMapper<Physics>(Physics.class, world);
-		healthMapper = new ComponentMapper<Health>(Health.class, world);
-		ammoMapper = new ComponentMapper<Ammo>(Ammo.class, world);
+		physicsMapper = world.getMapper(Physics.class);
+		healthMapper = world.getMapper(Health.class);
+		ammoMapper = world.getMapper(Ammo.class);
 		
 		healthColor = new Color(72f / 255f, 1f, 0f, 1f);
 		bgColor = new Color(1f, 1f, 1f, 0.2f);
@@ -65,8 +67,8 @@ public class HudRenderSystem extends EntitySystem {
 
 		ensurePlayerEntity();
 		
-		boundarySystem = world.getSystemManager().getSystem(BoundarySystem.class);
-		cameraSystem = world.getSystemManager().getSystem(CameraSystem.class);
+		boundarySystem = world.getSystem(BoundarySystem.class);
+		cameraSystem = world.getSystem(CameraSystem.class);
 	}
 
 	@Override
@@ -109,7 +111,7 @@ public class HudRenderSystem extends EntitySystem {
 			float offsetY = cameraSystem.getStartY();
 			g.drawRect(offsetX*scaleX, offsetY*scaleY, scaleX*cameraSystem.getWidth(), scaleY*cameraSystem.getHeight());
 			
-			ImmutableBag<Entity> entities = world.getGroupManager().getEntities("crates");
+			ImmutableBag<Entity> entities = world.getManager(GroupManager.class).getEntities("crates");
 			for(int i = 0; entities.size() > i; i++) {
 				Entity crate = entities.get(i);
 				Physics cratePhysics = physicsMapper.get(crate);
@@ -118,12 +120,12 @@ public class HudRenderSystem extends EntitySystem {
 				g.fillRect(crateX-1, crateY-1, 2, 2);
 			}
 			
-			ImmutableBag<Entity> tanks = world.getGroupManager().getEntities("tanks");
+			ImmutableBag<Entity> tanks = world.getManager(GroupManager.class).getEntities("tanks");
 			for(int i = 0; tanks.size() > i; i++) {
 				Entity t = tanks.get(i);
-				Player tp = world.getManager(PlayerManager.class).getPlayer(t);
+				String tp = world.getManager(PlayerManager.class).getPlayer(t);
 				Physics physics = physicsMapper.get(t);
-				g.setColor(tp.getColor());
+				g.setColor(Color.green);
 				float tx = physics.getX()*scaleX;
 				float ty = physics.getY()*scaleY;
 				g.fillRect(tx-3, ty-3, 6, 6);
@@ -167,7 +169,7 @@ public class HudRenderSystem extends EntitySystem {
 	
 	private void ensurePlayerEntity() {
 		if (player == null || !player.isActive())
-			player = world.getTagManager().getEntity("PLAYER");
+			player = world.getManager(TagManager.class).getEntity("PLAYER");
 	}
 
 }

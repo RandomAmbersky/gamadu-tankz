@@ -1,8 +1,9 @@
 package com.tankz.systems.misc;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
-import com.artemis.DelayedEntityProcessingSystem;
 import com.artemis.Entity;
+import com.artemis.systems.DelayedEntityProcessingSystem;
 import com.tankz.components.Expiration;
 
 public class ExpirationSystem extends DelayedEntityProcessingSystem {
@@ -11,12 +12,12 @@ public class ExpirationSystem extends DelayedEntityProcessingSystem {
 	private int smallestLifeTime;
 
 	public ExpirationSystem() {
-		super(Expiration.class);
+		super(Aspect.getAspectFor(Expiration.class));
 	}
 
 	@Override
 	public void initialize() {
-		expirationMapper = new ComponentMapper<Expiration>(Expiration.class, world);
+		expirationMapper = world.getMapper(Expiration.class);
 	}
 
 	@Override

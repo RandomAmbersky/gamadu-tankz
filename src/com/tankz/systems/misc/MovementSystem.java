@@ -1,8 +1,9 @@
 package com.tankz.systems.misc;
 
+import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.artemis.EntityProcessingSystem;
+import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.TrigLUT;
 import com.tankz.components.Transform;
 import com.tankz.components.Velocity;
@@ -10,7 +11,7 @@ import com.tankz.components.Velocity;
 public class MovementSystem extends EntityProcessingSystem {
 
 	public MovementSystem() {
-		super(Transform.class, Velocity.class);
+		super(Aspect.getAspectFor(Transform.class, Velocity.class));
 	}
 
 	private ComponentMapper<Transform> transformMapper;
@@ -18,8 +19,8 @@ public class MovementSystem extends EntityProcessingSystem {
 
 	@Override
 	public void initialize() {
-		transformMapper = new ComponentMapper<Transform>(Transform.class, world);
-		velocityMapper = new ComponentMapper<Velocity>(Velocity.class, world);
+		transformMapper = world.getMapper(Transform.class);
+		velocityMapper = world.getMapper(Velocity.class);
 	}
 
 	@Override
